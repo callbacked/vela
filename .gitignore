@@ -6,7 +6,6 @@ CMakeCache.txt
 *.vpk_param.sfo
 *.vpk
 *.vpk.out
-*.png
 *.cmake
 vela
 /build
