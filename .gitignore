@@ -1,0 +1,13 @@
+CMakeFiles/
+CMakeCache.txt
+*.self
+*.self.out
+*.velf
+*.vpk_param.sfo
+*.vpk
+*.vpk.out
+*.png
+*.cmake
+vela
+/build
+.DS_Store
