@@ -136,7 +136,14 @@ void handle_settings_input(
             if (settings_model_selection_open) {
                 // Navigate model selection
                 settings_model_selection_index++;
-                // We don't know available_models.size() here, but we can prevent out-of-bounds in the drawing code
+
+                extern std::vector<std::string> available_models;
+                if (settings_model_selection_index >= (int)available_models.size()) {
+                    settings_model_selection_index = available_models.size() - 1;
+                    if (settings_model_selection_index < 0) {
+                        settings_model_selection_index = 0;  
+                    }
+                }
                 if (left_stick_down || right_stick_down) analog_cooldown = 15;
             } else {
                 // Navigate settings options

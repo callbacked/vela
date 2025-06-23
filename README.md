@@ -10,8 +10,7 @@ Vela is a client for the PS Vita that allows you to connect and interact with LL
 
 ### Features
 
-*   **OpenAI-Compatible API Support**: Connect to any LLM endpoint that is OpenAI API Compatible.
-*   **Image Messaging**: Send images to multimodal models directly from your PS Vita's camera. 
+*   **Image Messaging**: Use the Vita's camera to send images to multimodal models directly from your PS Vita's camera. 
 *   **Chat History and Sessions**: Conversations are saved, and you can create, delete, and switch between multiple chat sessions.
 
 
