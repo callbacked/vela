@@ -2,6 +2,12 @@
 
 Vela is a client for the PS Vita that allows you to connect and interact with LLMs.
 
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/2f5e3ab1-b661-4aae-81b2-9c4b0ec9c488" width="45%" />
+  <img src="https://github.com/user-attachments/assets/5939117d-4cc4-4e57-a559-39c7796f96da" width="45%" />
+</p>
+
+
 ### Features
 
 *   **OpenAI-Compatible API Support**: Connect to any LLM endpoint that is OpenAI API Compatible.
