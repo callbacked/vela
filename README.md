@@ -25,7 +25,11 @@ Vela saves its settings and chat sessions to the `ux0:data/vela/` directory on y
 
 ### Controls
 
-[pending image graphic]
+
+![chat_controls](https://github.com/user-attachments/assets/70701b21-fa79-4b72-9c7d-2a41ba170757)
+![camera_controls](https://github.com/user-attachments/assets/9ad29a65-a9c6-4e76-a406-df9bca5488a3)
+![chat_history_controls](https://github.com/user-attachments/assets/27eda19a-1bc9-46c7-9286-d9bcb99bca32)
+![settings_controls](https://github.com/user-attachments/assets/c5c7aa9e-7843-47d4-85d0-1d1308f27f50)
 
 
 ### Building from Source
