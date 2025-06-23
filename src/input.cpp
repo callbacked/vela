@@ -66,7 +66,18 @@ void handle_settings_keyboard(Settings& settings, SettingsSelection selection, b
             settings.endpoint = input;
         } else if (selection == SettingsSelection::API_KEY_SETTING) {
             settings.apiKey = input;
+        } else if (selection == SettingsSelection::MODELS_ENDPOINT_OVERRIDE) {
+            if (input.empty()) {
+                // remove override if empty 
+                if (settings.models_endpoint_overrides.count(settings.endpoint) > 0) {
+                    settings.models_endpoint_overrides.erase(settings.endpoint);
+                }
+            } else {
+                settings.models_endpoint_overrides[settings.endpoint] = input;
+            }
         }
+    
+        save_settings(settings);
         
         keyboard_active = false;
     } else if (state == KEYBOARD_STATE_NONE) {
@@ -111,6 +122,9 @@ void handle_settings_input(
                 } else if (settings_selection == SettingsSelection::DEFAULT_MODEL) {
                     settings_selection = SettingsSelection::API_KEY_SETTING;
                     if (left_stick_up || right_stick_up) analog_cooldown = 15;
+                } else if (settings_selection == SettingsSelection::MODELS_ENDPOINT_OVERRIDE) {
+                    settings_selection = SettingsSelection::DEFAULT_MODEL;
+                    if (left_stick_up || right_stick_up) analog_cooldown = 15;
                 }
             }
         }
@@ -131,6 +145,9 @@ void handle_settings_input(
                     if (left_stick_down || right_stick_down) analog_cooldown = 15;
                 } else if (settings_selection == SettingsSelection::API_KEY_SETTING) {
                     settings_selection = SettingsSelection::DEFAULT_MODEL;
+                    if (left_stick_down || right_stick_down) analog_cooldown = 15;
+                } else if (settings_selection == SettingsSelection::DEFAULT_MODEL) {
+                    settings_selection = SettingsSelection::MODELS_ENDPOINT_OVERRIDE;
                     if (left_stick_down || right_stick_down) analog_cooldown = 15;
                 }
             }
@@ -174,6 +191,17 @@ void handle_settings_input(
                                 break;
                             }
                         }
+                    }
+                } else if (settings_selection == SettingsSelection::MODELS_ENDPOINT_OVERRIDE) {
+                    // Get the current override or empty string
+                    std::string current_override = "";
+                    if (settings.models_endpoint_overrides.count(settings.endpoint) > 0) {
+                        current_override = settings.models_endpoint_overrides[settings.endpoint];
+                    }
+                    
+                    // Open keyboard with current override
+                    if (keyboard_start(current_override, "Enter Models Endpoint URL")) {
+                        settings_keyboard_active = true;
                     }
                 }
             }

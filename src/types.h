@@ -18,6 +18,7 @@ struct Settings {
     std::string endpoint;
     std::string apiKey;
     std::map<std::string, std::string> default_models;
+    std::map<std::string, std::string> models_endpoint_overrides; // Maps chat completion endpoints to custom models endpoints
 };
 
 enum class UISelection {
@@ -31,7 +32,8 @@ enum class UISelection {
 enum class SettingsSelection {
     ENDPOINT,
     API_KEY_SETTING,
-    DEFAULT_MODEL
+    DEFAULT_MODEL,
+    MODELS_ENDPOINT_OVERRIDE
 };
 
 struct ChatMessage {

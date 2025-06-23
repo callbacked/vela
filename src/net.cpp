@@ -7,6 +7,7 @@
 #include <jsoncpp/json/json.h>
 
 #include "config.h"
+#include "settings.h"
 
 std::string nativePostRequest(const std::string& url, const std::string& postdata, const std::string& apiKey) {
     int tpl = -1, conn = -1, req = -1;
@@ -159,28 +160,29 @@ std::string nativePostRequestWithImage(const std::string& url, const std::string
     return nativePostRequest(url, json_payload, apiKey);
 }
 
-std::vector<std::string> fetch_models(const std::string& endpoint, const std::string& apiKey) { //redo later this is jank (why am I replacing the endpoint path with the models path? Just take the base url and append the models path? (Keep the OWUI stuff though))
+std::vector<std::string> fetch_models(const std::string& endpoint, const std::string& apiKey) {
     std::vector<std::string> models;
-    std::string models_url = endpoint;
+    std::string models_url;
 
-    // check for OWUI style path and replace it (i literally dont know why their endpoint paths are nonstandard)
-    std::string webui_chat_path = "/api/chat/completions";
-    size_t pos = models_url.rfind(webui_chat_path);
-    if (pos != std::string::npos) {
-        models_url.replace(pos, webui_chat_path.length(), "/api/models"); // normalize
+
+    Settings settings = load_settings();
+    if (settings.models_endpoint_overrides.count(endpoint) > 0) {
+        // Use the override URL directly
+        models_url = settings.models_endpoint_overrides[endpoint];
     } else {
-        // Check for OpenAI style path and replace it
-        std::string openai_chat_path = "/v1/chat/completions";
-        pos = models_url.rfind(openai_chat_path);
-        if (pos != std::string::npos) {
-            models_url.replace(pos, openai_chat_path.length(), "/v1/models");
+        // No override, use the default logic (pulls models from openai and webui style endpoints)
+        
+        const std::string openai_chat_suffix = "/v1/chat/completions";
+        const std::string webui_chat_suffix = "/api/chat/completions";
+
+        if (endpoint.size() > openai_chat_suffix.size() && endpoint.rfind(openai_chat_suffix) == endpoint.size() - openai_chat_suffix.size()) {
+            // openai style suffix, replace it with the models path
+            models_url = endpoint.substr(0, endpoint.size() - openai_chat_suffix.size()) + "/v1/models";
+        } else if (endpoint.size() > webui_chat_suffix.size() && endpoint.rfind(webui_chat_suffix) == endpoint.size() - webui_chat_suffix.size()) {
+            // OWUI suffix, replace it with the models path
+            models_url = endpoint.substr(0, endpoint.size() - webui_chat_suffix.size()) + "/api/models";
         } else {
-            // Fallback for base URL: if no specific chat path is found,
-            // assume a base URL was provided and append the models path.
-            if (!models_url.empty() && models_url.back() != '/') {
-                models_url += "/";
-            }
-            models_url += "api/models";
+            return models;
         }
     }
 

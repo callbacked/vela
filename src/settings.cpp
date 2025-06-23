@@ -37,11 +37,17 @@ Settings load_settings() {
         settings.endpoint = root.get("endpoint", API_ENDPOINT).asString();
         settings.apiKey = root.get("apiKey", "").asString();
         
-        // Load default models map
         if (root.isMember("default_models") && root["default_models"].isObject()) {
             Json::Value default_models_json = root["default_models"];
             for (auto const& key : default_models_json.getMemberNames()) {
                 settings.default_models[key] = default_models_json[key].asString();
+            }
+        }
+        
+        if (root.isMember("models_endpoint_overrides") && root["models_endpoint_overrides"].isObject()) {
+            Json::Value overrides_json = root["models_endpoint_overrides"];
+            for (auto const& key : overrides_json.getMemberNames()) {
+                settings.models_endpoint_overrides[key] = overrides_json[key].asString();
             }
         }
     } else {
@@ -66,6 +72,12 @@ void save_settings(const Settings& settings) {
         default_models_json[pair.first] = pair.second;
     }
     root["default_models"] = default_models_json;
+
+    Json::Value overrides_json(Json::objectValue);
+    for (const auto& pair : settings.models_endpoint_overrides) {
+        overrides_json[pair.first] = pair.second;
+    }
+    root["models_endpoint_overrides"] = overrides_json;
 
     Json::StreamWriterBuilder writer_builder;
     std::string content = Json::writeString(writer_builder, root);

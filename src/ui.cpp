@@ -532,21 +532,32 @@ void draw_settings_ui(
         } else {
             default_model_text += "[Not set]";
         }
+        
+        // Add text for models endpoint override
+        std::string override_text = "Models Endpoint Override: ";
+        if (settings.models_endpoint_overrides.count(settings.endpoint) > 0) {
+            override_text += settings.models_endpoint_overrides.at(settings.endpoint);
+        } else {
+            override_text += "[Not set]";
+        }
 
         float endpoint_text_width = vita2d_pgf_text_width(pgf, 1.0f, endpoint_text.c_str());
         float apikey_text_width = vita2d_pgf_text_width(pgf, 1.0f, apikey_text.c_str());
         float default_model_text_width = vita2d_pgf_text_width(pgf, 1.0f, default_model_text.c_str());
+        float override_text_width = vita2d_pgf_text_width(pgf, 1.0f, override_text.c_str());
         
-        float max_text_width = std::max({endpoint_text_width, apikey_text_width, default_model_text_width});
+        float max_text_width = std::max({endpoint_text_width, apikey_text_width, default_model_text_width, override_text_width});
         float text_x = (SCREEN_WIDTH - max_text_width) / 2;
         
         float endpoint_y = 170;
         float apikey_y = 220;
         float default_model_y = 270;
+        float override_y = 320;
 
         vita2d_pgf_draw_text(pgf, text_x, endpoint_y, RGBA8(255, 255, 255, ui_alpha), 1.0f, endpoint_text.c_str());
         vita2d_pgf_draw_text(pgf, text_x, apikey_y, RGBA8(255, 255, 255, ui_alpha), 1.0f, apikey_text.c_str());
         vita2d_pgf_draw_text(pgf, text_x, default_model_y, RGBA8(255, 255, 255, ui_alpha), 1.0f, default_model_text.c_str());
+        vita2d_pgf_draw_text(pgf, text_x, override_y, RGBA8(255, 255, 255, ui_alpha), 1.0f, override_text.c_str());
 
         int selection_y_center = 0;
         if (selection == SettingsSelection::ENDPOINT) {
@@ -555,6 +566,8 @@ void draw_settings_ui(
             selection_y_center = apikey_y - 8; 
         } else if (selection == SettingsSelection::DEFAULT_MODEL) {
             selection_y_center = default_model_y - 8;
+        } else if (selection == SettingsSelection::MODELS_ENDPOINT_OVERRIDE) {
+            selection_y_center = override_y - 8;
         }
         
         float highlight_padding = 40.0f; 

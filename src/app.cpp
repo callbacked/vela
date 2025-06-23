@@ -450,7 +450,8 @@ void run_app(AppContext& ctx) {
                     
                     // Check if settings actually changed
                     if ((ctx.settings_selection == SettingsSelection::ENDPOINT && ctx.settings.endpoint != old_endpoint) ||
-                        (ctx.settings_selection == SettingsSelection::API_KEY_SETTING && ctx.settings.apiKey != old_apiKey)) {
+                        (ctx.settings_selection == SettingsSelection::API_KEY_SETTING && ctx.settings.apiKey != old_apiKey) ||
+                        (ctx.settings_selection == SettingsSelection::MODELS_ENDPOINT_OVERRIDE)) {
                         settings_changed = true;
                     }
                     
@@ -523,7 +524,6 @@ void run_app(AppContext& ctx) {
                             
                             // Check for START button to exit
                             sceCtrlPeekBufferPositive(0, &pad, 1);
-                            // No START check here anymore, handled globally
                         }
                     }
                 }
