@@ -39,13 +39,7 @@ bool save_sessions(const std::vector<ChatSession>& sessions) {
                 messageJson["show_reasoning"] = message.show_reasoning;
             }
             
-            if (message.image) {
-                std::string image_filename = generate_image_filename(session_idx, msg_idx);
-                
-                if (save_texture_to_file(message.image, image_filename)) {
-                    messageJson["image_path"] = image_filename;
-                }
-            } else if (!message.image_path.empty()) {
+            if (!message.image_path.empty()) {
                 messageJson["image_path"] = message.image_path;
             }
             
