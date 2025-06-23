@@ -198,8 +198,34 @@ void draw_ui(
                     vita2d_pgf_draw_text(pgf, 35, current_y - 10, RGBA8(128, 128, 128, message_alpha), 1.0f, thinking_prompt);
                 }
                 
+                // Calculate the maximum width needed for the content
+                float max_text_width = 0.0f;
+                
+                // Check width needed for regular text
+                for (const auto& line : msg.wrapped_text) {
+                    float line_width = vita2d_pgf_text_width(pgf, 1.0f, line.c_str());
+                    if (line_width > max_text_width) max_text_width = line_width;
+                }
+                
+                // Check width needed for reasoning text if shown
+                if (msg.show_reasoning && !msg.wrapped_reasoning.empty()) {
+                    for (const auto& line : msg.wrapped_reasoning) {
+                        float line_width = vita2d_pgf_text_width(pgf, 1.0f, line.c_str()) + 10; // Extra indent for reasoning
+                        if (line_width > max_text_width) max_text_width = line_width;
+                    }
+                }
+                
+                // Add padding and ensure minimum width
+                float content_width = std::max(image_w, max_text_width);
+                float bubble_width = content_width + 50; // Add padding (15px left + 35px right)
+                
+                // Cap at maximum width
+                if (bubble_width > 480.0f) bubble_width = 480.0f;
+                // Ensure minimum width
+                if (bubble_width < 100.0f) bubble_width = 100.0f;
+                
                 unsigned int bubble_color = is_hovered ? RGBA8(50, 50, 50, message_alpha) : RGBA8(40, 40, 40, message_alpha);
-                draw_rounded_rect(20, current_y, 480, message_height, 10, bubble_color);
+                draw_rounded_rect(20, current_y, bubble_width, message_height, 10, bubble_color);
                 int text_y = current_y + 25;
 
                 if (has_image) {
