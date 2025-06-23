@@ -54,6 +54,17 @@
 const unsigned int FADE_SPEED = 8;
 const unsigned int CAMERA_FADE_SPEED = 15;
 
+
+std::string trim_whitespace(const std::string& str) {
+    const auto begin = str.find_first_not_of(" \t\n\r\f\v");
+    if (begin == std::string::npos) {
+        return ""; 
+    }
+    
+    const auto end = str.find_last_not_of(" \t\n\r\f\v");
+    return str.substr(begin, end - begin + 1);
+}
+
 void initialize_app(AppContext& ctx) {
     // Load system modules
     sceSysmoduleLoadModule(SCE_SYSMODULE_NET);
@@ -396,6 +407,10 @@ void run_app(AppContext& ctx) {
                             }
                         }
                     }
+                    
+                    // Trim whitespace from parsed_content and reasoning_text
+                    parsed_content = trim_whitespace(parsed_content);
+                    reasoning_text = trim_whitespace(reasoning_text);
                     // --- End of JSON parsing ---
 
                     // Add the new message from the LLM to the chat history

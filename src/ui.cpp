@@ -195,7 +195,7 @@ void draw_ui(
                 
                 if (!msg.reasoning.empty() && is_hovered) {
                     const char* thinking_prompt = msg.show_reasoning ? "△ Hide Thinking" : "△ Show Thinking";
-                    vita2d_pgf_draw_text(pgf, 35, current_y - 10, RGBA8(128, 128, 128, message_alpha), 0.9f, thinking_prompt);
+                    vita2d_pgf_draw_text(pgf, 35, current_y - 10, RGBA8(128, 128, 128, message_alpha), 1.0f, thinking_prompt);
                 }
                 
                 unsigned int bubble_color = is_hovered ? RGBA8(50, 50, 50, message_alpha) : RGBA8(40, 40, 40, message_alpha);
@@ -209,7 +209,7 @@ void draw_ui(
                 
                 if (msg.show_reasoning && !msg.wrapped_reasoning.empty()) {
                     for (const auto& line : msg.wrapped_reasoning) {
-                        vita2d_pgf_draw_text(pgf, 45, text_y, RGBA8(180, 180, 180, message_alpha), 0.9f, line.c_str());
+                        vita2d_pgf_draw_text(pgf, 45, text_y, RGBA8(180, 180, 180, message_alpha), 1.0f, line.c_str());
                         text_y += 20;
                     }
                     
